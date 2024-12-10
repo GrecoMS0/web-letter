@@ -159,6 +159,9 @@
             align-items: center;
             justify-content: center;
             min-height: 3em;
+            background-color: rgba(122, 8, 8, 0.6);
+            border-radius: 10px;
+            padding: 10px;
         }
 
         .hidden {
@@ -170,7 +173,9 @@
             padding: 10px 20px;
             background-color: black;
             color: white;
-            border: none;
+            border: 3px;
+            border-style: solid;
+            border-color: white;
             border-radius: 5px;
             font-size: 1.5rem;
             cursor: pointer;
@@ -354,7 +359,7 @@
     <script>
         const paragraphs = [
             "",
-            "Oi, meu universo. Fiz isso pra te dizer que você faz uma diferença enorme nos meus dias...",
+            "Oi, meu universo ❤️. Fiz isso pra te dizer que você faz uma diferença enorme nos meus dias...",
             "Quando penso em você, automaticamente o sorriso vem junto, você tem o poder de me fazer feliz só estando nos meus pensamentos...",
             "Quero que você se lembre que, cada momento ao seu lado é muito especial pra mim...",
             "Adoro quando estamos rindo e eu olho pra você, e vejo o tanto que eu te amo...",
@@ -369,6 +374,12 @@
             const finalMessage = document.getElementById("final-message");
 
             dynamicText.textContent = paragraphs[currentParagraph];
+
+            if (currentParagraph === 0) {
+                dynamicText.style.display = 'none';
+            } else {
+                dynamicText.style.display = 'block';
+            }
 
             if (currentParagraph === paragraphs.length - 1) {
                 nextButton.style.display = "none";
