@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +21,28 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+
+        @keyframes twinkle {
+
+            0%,
+            100% {
+                opacity: 0.3;
+            }
+
+            50% {
+                opacity: 1;
+            }
         }
 
         .emoji {
@@ -74,10 +97,90 @@
 
         .intro {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: white;
+            text-align: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        .intro h1,
+        .intro h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .intro h2 {
+            visibility: hidden;
+            opacity: 0;
+            cursor: pointer;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .intro h2.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .intro h2:hover {
+            background-color: #ff2d6f;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .intro p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .text-container {
+            display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-top: 20px;
+            min-height: 6em;
+        }
+
+        #dynamic-text {
+            font-size: 1.2rem;
+            margin: 0 20px;
+            text-align: center;
+            max-width: 80%;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 3em;
+        }
+
+        .hidden {
+            opacity: 0;
+        }
+
+        #next-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            align-self: center;
+        }
+
+        #next-button:hover {
+            background-color: white;
+            color: black;
         }
 
         .intro button {
@@ -172,6 +275,57 @@
             font-weight: bold;
             padding: 15px;
         }
+
+        @media (max-width: 768px) {
+            .intro h1 {
+                font-size: 2rem;
+            }
+
+            .intro p,
+            .intro button {
+                font-size: 1rem;
+            }
+
+            .card {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .card button {
+                font-size: 1.2rem;
+            }
+
+            #next-button {
+                font-size: 1.2rem;
+                padding: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro h1 {
+                font-size: 1.5rem;
+            }
+
+            .intro p {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+
+            .card {
+                width: 95%;
+                padding: 10px;
+            }
+
+            .card button {
+                font-size: 1rem;
+                padding: 10px 15px;
+            }
+
+            #next-button {
+                font-size: 1rem;
+                padding: 6px;
+            }
+        }
     </style>
 </head>
 
@@ -179,19 +333,74 @@
     <div class="background"></div>
 
     <div class="intro">
-        <button onclick="start()">Clique Aqui</button>
+        <h1>Uma pequena mensagem para você</h1>
+        <div class="text-container">
+            <p id="dynamic-text"></p>
+            <button id="next-button">➤</button>
+        </div>
+
+        <h2 id="final-message" onclick="start()">O que será que temos aqui?</h2>
     </div>
 
     <div class="card-container">
         <div class="card">
             <div class="emoji-display">🥕</div>
             <p>Cenouras deixam a visão melhor</p>
-            <button onclick="nextCard(this)">→</button>
+            <button onclick="nextCard(this)">➤</button>
             <div class="extra-message">Você é tudo pra mim!</div>
         </div>
     </div>
 
     <script>
+        const paragraphs = [
+            "",
+            "Oi, meu universo. Fiz isso pra te dizer que você faz uma diferença enorme nos meus dias...",
+            "Quando penso em você, automaticamente o sorriso vem junto, você tem o poder de me fazer feliz só estando nos meus pensamentos...",
+            "Quero que você se lembre que, cada momento ao seu lado é muito especial pra mim...",
+            "Adoro quando estamos rindo e eu olho pra você, e vejo o tanto que eu te amo...",
+            "Eu te amo meu amor, hoje e pra sempre ❤️"
+        ];
+
+        let currentParagraph = 0;
+
+        function updateParagraph() {
+            const dynamicText = document.getElementById("dynamic-text");
+            const nextButton = document.getElementById("next-button");
+            const finalMessage = document.getElementById("final-message");
+
+            dynamicText.textContent = paragraphs[currentParagraph];
+
+            if (currentParagraph === paragraphs.length - 1) {
+                nextButton.style.display = "none";
+                finalMessage.classList.add('show');
+            }
+        }
+
+        document.getElementById("next-button").addEventListener("click", () => {
+            currentParagraph++;
+            if (currentParagraph < paragraphs.length) {
+                updateParagraph();
+            }
+        });
+
+        updateParagraph();
+
+        const starsCount = 500;
+
+        function createStars() {
+            const background = document.querySelector('.background');
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = `${Math.random() * 100}vw`;
+                star.style.top = `${Math.random() * 100}vh`;
+                star.style.animationDuration = `${Math.random() * 2 + 1}s`;
+                background.appendChild(star);
+            }
+        }
+
+        createStars();
+
         const messages = [
             { text: "Cenouras deixam a visão melhor...", emoji: "🥕" },
             { text: "Bananas deixam a digestão melhor...", emoji: "🍌" },
@@ -207,6 +416,9 @@
             document.querySelector('.intro').style.display = 'none';
             const cardContainer = document.querySelector('.card-container');
             cardContainer.style.display = 'flex';
+
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => star.remove());
 
             const card = document.querySelector('.card');
             card.classList.add('fade-in-once');
