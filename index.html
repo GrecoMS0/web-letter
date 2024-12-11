@@ -159,7 +159,7 @@
             align-items: center;
             justify-content: center;
             min-height: 3em;
-            background-color: rgba(122, 8, 8, 0.6);
+            background-color: rgb(78, 78, 78);
             opacity: 1;
             border-radius: 10px;
             padding: 10px;
@@ -377,59 +377,72 @@
 
     <script>
         const paragraphs = [
-            "",
-            "Oi, meu universo ❤️. Fiz isso pra te dizer que você faz uma diferença enorme nos meus dias...",
-            "Quando penso em você, automaticamente o sorriso vem junto, você tem o poder de me fazer feliz só estando nos meus pensamentos...",
-            "Quero que você se lembre que, cada momento ao seu lado é muito especial pra mim...",
-            "Adoro quando estamos rindo e eu olho pra você, e vejo o tanto que eu te amo...",
-            "Eu te amo meu amor, hoje e pra sempre ❤️"
+            "...",
+            "Oi, meu universo ❤️.",
+            "Fiz isso pra te dizer que você faz uma diferença enorme nos meus dias, sou imensamente grato por ter você na minha vida.",
+            "Quando penso em você, automaticamente o sorriso vem junto, porque você tem o poder de me fazer feliz só estando nos meus pensamentos.",
+            "Cada momento ao seu lado é único, e extremamente especial pra mim.",
+            "Eu adoro quando estamos rindo juntos e eu olho pra você, e vejo o quão feliz eu sou com você.",
+            "A vida é muito melhor com você do lado...",
+            "Eu te amo, meu amor, hoje e pra sempre ❤️"
         ];
 
         let currentParagraph = 0;
+
+        function typeText(element, text, callback) {
+            let i = 0;
+            element.textContent = "";
+            
+            const typingInterval = setInterval(() => {
+                element.textContent += text[i];
+                i++;
+                if (i >= text.length) {
+                    clearInterval(typingInterval);
+                    if (callback) callback();
+                }
+            }, 10);
+        }
 
         function updateParagraph() {
             const dynamicText = document.getElementById("dynamic-text");
             const nextButton = document.getElementById("next-button");
             const finalMessage = document.getElementById("final-message");
 
-            dynamicText.classList.remove('fade-in');
-            dynamicText.classList.add('fade-out');
+            dynamicText.classList.remove("fade-in");
+            dynamicText.classList.add("fade-out");
 
             setTimeout(() => {
-                dynamicText.textContent = paragraphs[currentParagraph];
+                currentParagraph++;
 
-                if (currentParagraph === 0) {
-                    dynamicText.style.display = 'none';
-                } else {
-                    dynamicText.style.display = 'block';
+                if (currentParagraph < paragraphs.length) {
+                    dynamicText.classList.remove("fade-out");
+                    dynamicText.classList.add("fade-in");
+
+                    typeText(dynamicText, paragraphs[currentParagraph], () => {
+                        if (currentParagraph === paragraphs.length - 1) {
+                            nextButton.style.display = "none";
+                            finalMessage.classList.add("show");
+                        }
+                    });
                 }
-
-                if (currentParagraph === paragraphs.length - 1) {
-                    nextButton.style.display = "none";
-                    finalMessage.classList.add('show');
-                }
-
-                dynamicText.classList.remove('fade-out');
-                dynamicText.classList.add('fade-in');
             }, 500);
         }
 
         document.getElementById("next-button").addEventListener("click", () => {
-            currentParagraph++;
             if (currentParagraph < paragraphs.length) {
                 updateParagraph();
             }
         });
 
-        updateParagraph();
+        typeText(document.getElementById("dynamic-text"), paragraphs[currentParagraph]);
 
         const starsCount = 500;
 
         function createStars() {
-            const background = document.querySelector('.background');
+            const background = document.querySelector(".background");
             for (let i = 0; i < starsCount; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
+                const star = document.createElement("div");
+                star.className = "star";
                 star.style.left = `${Math.random() * 100}vw`;
                 star.style.top = `${Math.random() * 100}vh`;
                 star.style.animationDuration = `${Math.random() * 2 + 1}s`;
@@ -451,59 +464,59 @@
 
         function start() {
             document.body.style.backgroundColor = "#ffcad4";
-            document.querySelector('.intro').style.display = 'none';
-            const cardContainer = document.querySelector('.card-container');
-            cardContainer.style.display = 'flex';
+            document.querySelector(".intro").style.display = "none";
+            const cardContainer = document.querySelector(".card-container");
+            cardContainer.style.display = "flex";
 
-            const stars = document.querySelectorAll('.star');
+            const stars = document.querySelectorAll(".star");
             stars.forEach(star => star.remove());
 
-            const card = document.querySelector('.card');
-            card.classList.add('fade-in-once');
+            const card = document.querySelector(".card");
+            card.classList.add("fade-in-once");
 
             setTimeout(() => {
-                card.classList.remove('fade-in-once');
+                card.classList.remove("fade-in-once");
             }, 1000);
 
             startEmojiFall(messages[0].emoji);
 
             setTimeout(() => {
-                const button = card.querySelector('button');
-                button.classList.add('fade-in');
-                button.style.pointerEvents = 'auto';
+                const button = card.querySelector("button");
+                button.classList.add("fade-in");
+                button.style.pointerEvents = "auto";
             }, 3000);
         }
 
         function nextCard(button) {
-            const card = document.querySelector('.card');
+            const card = document.querySelector(".card");
 
             currentCard++;
             if (currentCard >= messages.length) {
                 triggerConfetti(button);
-                card.querySelector('button').style.display = 'none';
+                card.querySelector("button").style.display = "none";
 
                 setTimeout(() => {
-                    const extraMessage = card.querySelector('.extra-message');
-                    extraMessage.style.display = 'block';
+                    const extraMessage = card.querySelector(".extra-message");
+                    extraMessage.style.display = "block";
                 });
                 return;
             }
 
-            card.style.transition = 'transform 0.6s ease-in-out';
+            card.style.transition = "transform 0.6s ease-in-out";
             card.style.transform = `rotateY(${360 * currentCard}deg)`;
 
             setTimeout(() => {
-                card.querySelector('.emoji-display').textContent = messages[currentCard].emoji;
-                card.querySelector('p').textContent = messages[currentCard].text;
+                card.querySelector(".emoji-display").textContent = messages[currentCard].emoji;
+                card.querySelector("p").textContent = messages[currentCard].text;
 
                 clearInterval(emojiInterval);
                 startEmojiFall(messages[currentCard].emoji);
 
-                card.querySelector('button').classList.remove('fade-in');
+                card.querySelector("button").classList.remove("fade-in");
 
                 setTimeout(() => {
-                    card.querySelector('button').classList.add('fade-in');
-                    card.querySelector('button').style.pointerEvents = 'auto';
+                    card.querySelector("button").classList.add("fade-in");
+                    card.querySelector("button").style.pointerEvents = "auto";
                 }, 3000);
             }, 100);
         }
@@ -514,29 +527,29 @@
             const buttonY = rect.top + rect.height / 2 + window.pageYOffset;
 
             for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
+                const confetti = document.createElement("div");
                 const angle = Math.random() * 360;
                 const distance = Math.random() * 200 + 50;
-                confetti.className = 'confetti';
-                confetti.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
-                confetti.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+                confetti.className = "confetti";
+                confetti.style.setProperty("--x", `${Math.cos(angle) * distance}px`);
+                confetti.style.setProperty("--y", `${Math.sin(angle) * distance}px`);
                 confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
                 confetti.style.left = `${buttonX}px`;
                 confetti.style.top = `${buttonY}px`;
                 document.body.appendChild(confetti);
 
-                confetti.addEventListener('animationend', () => confetti.remove());
+                confetti.addEventListener("animationend", () => confetti.remove());
             }
         }
 
         function startEmojiFall(emoji) {
             function createEmoji() {
-                const emojiElement = document.createElement('div');
-                emojiElement.className = 'emoji';
+                const emojiElement = document.createElement("div");
+                emojiElement.className = "emoji";
                 emojiElement.textContent = emoji;
                 emojiElement.style.left = `${Math.random() * 100}vw`;
                 emojiElement.style.animationDuration = `${Math.random() * 2 + 3}s`;
-                document.querySelector('.background').appendChild(emojiElement);
+                document.querySelector(".background").appendChild(emojiElement);
 
                 setTimeout(() => emojiElement.remove(), 5000);
             }
@@ -544,6 +557,7 @@
             emojiInterval = setInterval(createEmoji, 10);
         }
     </script>
+
 </body>
 
 </html>
