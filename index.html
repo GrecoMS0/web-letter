@@ -160,6 +160,7 @@
             justify-content: center;
             min-height: 3em;
             background-color: rgba(122, 8, 8, 0.6);
+            opacity: 1;
             border-radius: 10px;
             padding: 10px;
         }
@@ -226,6 +227,24 @@
 
         .fade-in-once {
             animation: fade-in 1s ease-in-out forwards;
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fade-in {
+            animation: fade-in 0.5s forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
         }
 
         @keyframes fade-in {
@@ -373,18 +392,26 @@
             const nextButton = document.getElementById("next-button");
             const finalMessage = document.getElementById("final-message");
 
-            dynamicText.textContent = paragraphs[currentParagraph];
+            dynamicText.classList.remove('fade-in');
+            dynamicText.classList.add('fade-out');
 
-            if (currentParagraph === 0) {
-                dynamicText.style.display = 'none';
-            } else {
-                dynamicText.style.display = 'block';
-            }
+            setTimeout(() => {
+                dynamicText.textContent = paragraphs[currentParagraph];
 
-            if (currentParagraph === paragraphs.length - 1) {
-                nextButton.style.display = "none";
-                finalMessage.classList.add('show');
-            }
+                if (currentParagraph === 0) {
+                    dynamicText.style.display = 'none';
+                } else {
+                    dynamicText.style.display = 'block';
+                }
+
+                if (currentParagraph === paragraphs.length - 1) {
+                    nextButton.style.display = "none";
+                    finalMessage.classList.add('show');
+                }
+
+                dynamicText.classList.remove('fade-out');
+                dynamicText.classList.add('fade-in');
+            }, 500);
         }
 
         document.getElementById("next-button").addEventListener("click", () => {
